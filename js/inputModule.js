@@ -1,1 +1,1 @@
-angular.module('inputModule', []);
+angular.module('inputModule', ['inputController', 'inputService']).run();
