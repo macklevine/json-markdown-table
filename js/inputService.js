@@ -1,5 +1,5 @@
-angular.module('inputService', [])
-	.factory('inputService', function ($http, $q, $localStorage){
+angular.module('input.inputServices', [])
+	.factory('InputService', function ($http, $q){
 		var sendInputData = function(data){
 			return $http.post('/sendfields', data)
 				.then(function(response){
@@ -14,13 +14,3 @@ angular.module('inputService', [])
 			sendInputData : sendInputData
 		}
 	});
-
-        // return $http.get(utils.getApi(`/agents/${$localStorage.authData.id}/contacts`), {params: data}).then(
-        //     response => (response),
-        //     rejection => {
-        //         if ('404' === _.result(rejection, 'data.internalErrorCode', '').toString()) { //ignore error for no clients found.
-        //             return $q.resolve();
-        //         }
-        //         return $q.reject(rejection);
-        //     }
-        // );

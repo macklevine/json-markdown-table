@@ -5,7 +5,7 @@ var JSONMarkdownService = require('../jsonmarkdownservice.js');
 
 RouteConfigurator.prototype.configureRoutes = function configureRoutes(app){
 	app.post('/sendFields', function(req, res){
-		JSONMarkdownService.createJSONMarkdownTable(req)
+		JSONMarkdownService.createJSONMarkdownTable(req.body)
 			.then(function(markdownTableString){
 				//maybe write a saved markdown to a database.
 				res.send(200, markdownTableString)

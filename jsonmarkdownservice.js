@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('underscore');
+var Promise = require('bluebird');
 
 var test1 = require('./test1.json');
 test1 = JSON.stringify
@@ -16,6 +17,11 @@ var _isJSON = function _isJSON(string){
 
 
 var JSONMarkdownService = function JSONMarkdownService(){};
+
+JSONMarkdownService.prototype.createJSONMarkdownService = function createJSONMarkdownService(data){
+	console.log(data);
+	return "request received...";
+};
 
 JSONMarkdownService.prototype.validateHeaders = function validateHeaders(fieldArray){
 	var headers = fieldArray[0];
