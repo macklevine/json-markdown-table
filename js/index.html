@@ -8,11 +8,14 @@
 
 <div ng-app="inputModule" ng-controller="inputController">
 	<form name="headerForm">
-		<div class="row" ng-repeat="row in inputColumns">
+		<div class="row" ng-repeat="row in inputRows">
 	 		<input type="text" default-value="cell.value" ng-model="cell.value" ng-repeat="cell in row">
 	 	</div>
-	 		<button ng-click="addColumn()">add column</button>
- 	<button ng-click="submitHeaders()">Submit Table Headers</button>
+ 		<button ng-click="addColumn()">add column</button>
+ 		<button ng-click="removeColumn()">remove column</button>
+ 		<button ng-click="addRow()">add row</button>
+ 		<button ng-click="removeRow()">remove row</button>
+ 		<button ng-click="submitHeaders()">Generate Table</button>
  	</form>
 </div>
 
