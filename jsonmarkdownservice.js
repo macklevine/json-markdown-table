@@ -18,9 +18,9 @@ var _isJSON = function _isJSON(string){
 
 var JSONMarkdownService = function JSONMarkdownService(){};
 
-JSONMarkdownService.prototype.createJSONMarkdownService = function createJSONMarkdownService(data){
+JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(data){
 	console.log(data);
-	return "request received...";
+	return Promise.resolve("request received...");
 };
 
 JSONMarkdownService.prototype.validateHeaders = function validateHeaders(fieldArray){

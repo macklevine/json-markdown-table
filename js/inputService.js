@@ -4,10 +4,12 @@ angular.module('input.inputServices', [])
 			return $http.post('/sendfields', data)
 				.then(function(response){
 					//get the response string here.
-					return $q.resolve(response)
+					console.log(response);
+					console.log("getting response...");
+					return $q.resolve(response);
 				},
 				function(rejection){
-					return $q.reject(rejection)
+					return $q.reject(rejection);
 				});
 		}
 		return {
