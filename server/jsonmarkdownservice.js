@@ -46,7 +46,7 @@ JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerC
 JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldArray, columnIndex){
 	var maxWidth = 0;
 	var columnValues = [];
-	var parsed;
+	var parsed, JSONstring;
 
 	for (var i = 0; i < fieldArray.length; i++){
 		var element = fieldArray[i][columnIndex];
@@ -55,7 +55,7 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 			columnValues.push(element);
 			maxWidth = _.max([maxWidth, element.length]);
 		} else {
-			var JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
+			JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
 			columnValues.push(JSONstring);
 			// console.log("logging JSON string...");
 			// console.log(JSONstring);
@@ -76,15 +76,16 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 
 JSONMarkdownService.prototype.findRowHeight = function findRowHeight(fieldArray, rowIndex){
 	var maxHeight = 1; //the line height of a string.
-	var parsed;
+	var parsed, JSONstring;
 	for (var i = 0; i < fieldArray[0].length; i++){
 		var element = fieldArray[rowIndex][i];
 		parsed = _isJSON(element);
 		if (parsed){
-
+			JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
+			maxHeight = _.max([maxHeight, JSONstring.length]);
 		}
 	}
-
+	return maxHeight; //return the max height for the row.
 };
 
 JSONMarkdownService.prototype.constructColumns = function constructColumns(columnObject){

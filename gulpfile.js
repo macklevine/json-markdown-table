@@ -22,7 +22,7 @@ gulp.task( 'start-server', function() {
 });
 
 gulp.task('watch-for-changes', function(){
-	gulp.watch(['./client/js/*.js','./client/js/*.html','./server/*'], server.restart); //change to watch only for html and js files.
+	gulp.watch(['./client/js/*.js','./client/js/*.html','./server/*'], server.restart);
 	gulp.watch('./client/less/*', ['compile-less', server.restart]);
 });
 
