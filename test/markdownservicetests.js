@@ -34,7 +34,10 @@ describe('jsonMarkdownService', function(){
 		});
 	});
 	describe('.findColumnWidth() method', function(done){
-		xit('should find the widest cell in the column and send this value back as the column\'s max width', function(done){
+		it('should find the widest cell in the column and send this value back as the column\'s max width', function(done){
+			var columnObj = jsonMarkdownService.findColumnWidth(dummyInput3, 2);
+			expect(columnObj.maxWidth).to.equal(19);
+			expect(columnObj.columnValues.length).to.equal(2);
 			done();
 		});
 	});

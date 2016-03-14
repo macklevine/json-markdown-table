@@ -56,14 +56,12 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 		} else {
 			JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
 			columnValues.push(JSONstring);
-			// console.log("logging JSON string...");
-			// console.log(JSONstring);
-			maxWidth = _.max([
-					maxWidth, 
-					_.max(JSONstring, function(JSONStringLine){
-							return JSONStringLine.length;
-						})
-					]);
+
+			var largestSubString = _.max(JSONstring, function(JSONStringLine){
+				console.log(JSONStringLine.length);
+				return JSONStringLine.length;
+			});
+			maxWidth = _.max([maxWidth, largestSubString.length]);
 		}
 	}
 	//
