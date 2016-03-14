@@ -2,17 +2,40 @@
 
 var chai = require('chai');
 var expect = chai.expect;
-var dummyInput = require('./dummyinput1.json');
+
+var dummyInput1 = require('./dummyinputs/dummyinput1.json');
+var dummyInput2 = require('./dummyinputs/dummyinput2.json');
+var dummyInput3 = require('./dummyinputs/dummyinput3.json');
 
 var jsonMarkdownService = require('../server/jsonmarkdownservice');
 
 describe('jsonMarkdownService', function(){
-	xit('should validate ensure that the headers of a given input are all strings', function(){
-
-	});
 	describe('.validateHeaders() method', function(){
-		xit('should find the width of a column at a given index and stash the values it finds in each cell', function(){
-
+		it('should validate ensure that the headers of a given input are all strings', function(done){
+			jsonMarkdownService.validateHeaders(dummyInput1[0])
+				.then(function(response){
+					expect(response).to.equal("the headers look good.");
+					done();
+				});
+		});
+		it('should reject any set of headers where any of the cells do have JSON data', function(done){
+			jsonMarkdownService.validateHeaders(dummyInput2[0])
+				.catch(function(response){
+					expect(response).to.equal('The headers must all be non-JSON, non-empty strings');
+					done();
+				});
+		});
+		it('should reject any set of headers where any of the cells contains an empty string', function(done){
+			jsonMarkdownService.validateHeaders(dummyInput3[0])
+				.catch(function(response){
+					expect(response).to.equal('The headers must all be non-JSON, non-empty strings');
+					done();
+				});
+		});
+	});
+	describe('.findColumnWidth() method', function(done){
+		xit('should find the widest cell in the column and send this value back as the column\'s max width', function(done){
+			done();
 		});
 	});
 });

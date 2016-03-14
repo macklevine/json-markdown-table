@@ -7,7 +7,7 @@ var Promise = require('bluebird');
 
 var _isJSON = function _isJSON(string){
 	try {
-		return JSON.parse(str);
+		return JSON.parse(string);
 	} catch (e) {
 		return false
 	}
@@ -18,7 +18,6 @@ var heightAndWidthMap = [];
 var JSONMarkdownService = function JSONMarkdownService(){};
 
 JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(cells){
-	console.log(cells);
 	return this.validateHeaders(cells[0])
 		.then(function(response){
 			return response;
@@ -36,7 +35,7 @@ JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerC
 			console.log(cell.value);
 			//find a way to determine if a string is a valid variable name.
 			if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
-				reject('The headers must all be non-JSON, non-empty strings');
+				 reject('The headers must all be non-JSON, non-empty strings');
 			}
 		});
 		resolve("the headers look good.");
@@ -49,7 +48,7 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 	var parsed, JSONstring;
 
 	for (var i = 0; i < fieldArray.length; i++){
-		var element = fieldArray[i][columnIndex];
+		var element = fieldArray[i][columnIndex].value;
 		parsed = _isJSON(element);
 		if (!parsed){
 			columnValues.push(element);
@@ -78,7 +77,7 @@ JSONMarkdownService.prototype.findRowHeight = function findRowHeight(fieldArray,
 	var maxHeight = 1; //the line height of a string.
 	var parsed, JSONstring;
 	for (var i = 0; i < fieldArray[0].length; i++){
-		var element = fieldArray[rowIndex][i];
+		var element = fieldArray[rowIndex][i].value;
 		parsed = _isJSON(element);
 		if (parsed){
 			JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
