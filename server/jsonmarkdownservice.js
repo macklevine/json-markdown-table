@@ -3,9 +3,6 @@
 var _ = require('underscore');
 var Promise = require('bluebird');
 
-var test1 = require('./test1.json');
-test1 = JSON.stringify
-// console.log(test1);
 
 var _isJSON = function _isJSON(string){
 	try {

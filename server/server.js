@@ -6,8 +6,9 @@ var router = require('./routeconfigurators/routes');
 
 var app = express();
 app.use(bodyParser.json());
+console.log(__dirname);
 
-app.use(express.static(__dirname + "/js/"));
+app.use(express.static(__dirname + "/../client/js/"));
 //configure routes
 router.configureRoutes(app);
 
