@@ -15,21 +15,30 @@ var _isJSON = function _isJSON(string){
 	}
 };
 
-
 var JSONMarkdownService = function JSONMarkdownService(){};
 
-JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(data){
-	console.log(data);
-	return Promise.resolve("request received...");
+JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(cells){
+	console.log(cells);
+	return this.validateHeaders(cells[0])
+		.then(function(response){
+			return response;
+		})
+		.catch(function(err){
+			console.log("error caught...");
+			return err;
+		});
 };
 
-JSONMarkdownService.prototype.validateHeaders = function validateHeaders(fieldArray){
-	var headers = fieldArray[0];
-	_.each(headers, function(header){
-		//find a way to determine if a string is a valid variable name.
-		if(_isJSON(header) || typeof header !== 'string'){
-			throw new Error('headers must be non-json strings')
-		}
+JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerCells){
+	return new Promise(function(resolve, reject){
+		_.each(headerCells, function(cell){
+			console.log(cell.value);
+			//find a way to determine if a string is a valid variable name.
+			if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
+				reject('The headers must all be non-JSON, non-empty strings');
+			}
+		});
+		resolve("the headers look good.");
 	});
 };
 
@@ -56,11 +65,6 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 					]);
 		}
 	}
-
-	// console.log({
-	// 	maxWidth: maxWidth,
-	// 	columnValues: columnValues
-	// });
 
 	return {
 		maxWidth: maxWidth,
