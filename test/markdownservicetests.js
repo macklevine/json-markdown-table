@@ -2,6 +2,7 @@
 
 var chai = require('chai');
 var expect = chai.expect;
+var _ = require('underscore');
 
 var dummyInput1 = require('./dummyinputs/dummyinput1.json');
 var dummyInput2 = require('./dummyinputs/dummyinput2.json');
@@ -48,13 +49,16 @@ describe('jsonMarkdownService', function(){
 			done();
 		});
 	});
-	describe('.createJSONMarkdownTable() method', function(done){
-		it('should create a map of values we can use to construct columns', function(done){
-			jsonMarkdownService.createJSONMarkdownTable(dummyInput1)
-				.then(function(response){
-					console.log(response);
-					done();
-				});
+	describe('.createTableMap() method', function(done){
+		it('should create a map of values we can use to construct columns', function(){
+			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
+			expect(_.has(tableMap, 'columnObjects')).to.be.ok;
+			var verdict;
+			_.each(tableMap.objects, function(item){
+				verdict = _.has(item, 'maxWidth');
+				expect(verdict).to.be.ok;
+				expect(item.maxWidth).to.be.ok;
+			});
 		});
 	});
 });

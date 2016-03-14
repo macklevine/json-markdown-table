@@ -5,13 +5,6 @@ var Promise = require('bluebird');
 
 //TODO: see if there is an easy way to replace for/in loops with _.each.
 
-var _isJSON = function _isJSON(string){
-	try {
-		return JSON.parse(string);
-	} catch (e) {
-		return false
-	}
-};
 
 var columnObjects = [];
 var rowHeights = [];
@@ -23,26 +16,35 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 	return this.validateHeaders(fieldArray[0])
 		.then(function(response){
 			//construct the markdown table string only if the headers are valid.
-			for (var i = 0; i < fieldArray[0].length; i++){
-				columnObjects.push(self.findColumnWidth(fieldArray, i));
-			}
+			self.createTableMap(fieldArray)
 
-			for (var j = 0; j < fieldArray.length; j++){
-				rowHeights.push(self.findRowHeight(fieldArray, j));
-			}
-			//add 
-
-			return {
-				reponse : response,
-				columnObjects : columnObjects,
-				rowHeights : rowHeights
-			};
 		})
 		.catch(function(err){
 			return err;
 		});
+};
 
-	//Currently: just valdiating headers.
+JSONMarkdownService.prototype.createTableMap = function createTableMap(fieldArray){
+	var self = this;
+	for (var i = 0; i < fieldArray[0].length; i++){
+		columnObjects.push(self.findColumnWidth(fieldArray, i));
+	}
+
+	for (var j = 0; j < fieldArray.length; j++){
+		rowHeights.push(self.findRowHeight(fieldArray, j));
+	}
+	return {
+		columnObjects : columnObjects,
+		rowHeights : rowHeights
+	};
+};
+
+var _isJSON = function _isJSON(string){
+	try {
+		return JSON.parse(string);
+	} catch (e) {
+		return false
+	}
 };
 
 JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerCells){
@@ -101,25 +103,49 @@ JSONMarkdownService.prototype.findRowHeight = function findRowHeight(fieldArray,
 	return maxHeight; //return the max height for the row.
 };
 
+var _addHorizontalLine = function _addHorizontalLine(){
+	//TODO: refactor |---------------| construction algorithm here.
+};
+
 JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject){
+	//use the global rowHeights array within this function.
+
 	//for simplicity, render each column individually.
 	var cells = [];
 	for (var i = 0; i < columnObject.columnValues.length; i++){
+		var whiteSpaceToAdd = 0;
 		cells[i] = "";
-		//first element in the column requires top and bottom lines.
+		//first cell in the column gets both top and bottom lines.
 		if (i === 0){
-			cells[i] = '|';
+			cells[i] += '|';
 			for (var j = 0; j < maxWidth.length; j++){
 				cells[i] += '-';
 			}
 			cells[i] += '|\n';
 		}
 		if (typeof columnObject.columnValues[i] === 'string'){
-			cells[i] += ('|' + columnObject.columnValues[i] + '|\n');
+			whiteSpaceToAdd = columnObject.maxWidth - columnObject.columnValues[i].length;
+			cells[i] += ('|' + columnObject.columnValues[i]);
+			while (whiteSpaceToAdd){
+				cells[i] += " ";
+				whiteSpaceToAdd--;
+			}
+			cells[i] += "\n";
 		} else if (typeof columnObject.columnValues[i] === 'object'){
-
+			//add special logic here that deals with multi-line values.
 		}
+		//add the bottom line at the end of each cell.
+		cells[i] += '|';
+		for (var j = 0; j < maxWidth.length; j++){
+				cells[i] += '-';
+			}
+		cells[i] += '|\n';
 	}
+	return _.reduce(cells, function(memo, item){
+		return memo + item;
+	});
+
+	//TODO: append all of the cells together and return them.
 };
 
 module.exports = new JSONMarkdownService();
