@@ -5,23 +5,26 @@ var less = require('less');
 var fs = require('fs');
 var server = require('gulp-develop-server');
 
-gulp.task('default', ['compile-less', 'start-server']);
+//set up the watchers only once.
+gulp.task('default', ['compile-less', 'start-server', 'watch-for-changes']);
 
 gulp.task('compile-less', function(){
-	fs.readFile('./less/main.less', 'utf-8', function (e, contents){
+	fs.readFile('./client/less/main.less', 'utf-8', function (e, contents){
 		less.render(contents, function (e, output){
-			fs.writeFile('./less/main.css', output.css);
-			fs.writeFile('./js/main.css', output.css);
+			fs.writeFile('./client/less/main.css', output.css);
+			fs.writeFile('./client/js/main.css', output.css);
 		});
 	});
 });
 
 gulp.task( 'start-server', function() {
-    server.listen( { path: './server.js' } );
+    server.listen( { path: './server/server.js' } );
 });
 
-var watcher = gulp.watch(['./js/*','./less/*'])
+gulp.task('watch-for-changes', function(){
+	gulp.watch(['./client/js/*.js','./client/js/*.html','./server/*'], server.restart); //change to watch only for html and js files.
+	gulp.watch('./client/less/*', ['compile-less', server.restart]);
+});
+
  
-// gulp.task( 'restart-server', function() {
-//     gulp.watch( [ './app.js' ], server.restart );
-// });
+gulp.task('restart-server', server.restart);

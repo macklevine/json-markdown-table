@@ -3,6 +3,7 @@
 var _ = require('underscore');
 var Promise = require('bluebird');
 
+//TODO: see if there is an easy way to replace for/in loops with _.each.
 
 var _isJSON = function _isJSON(string){
 	try {
@@ -11,6 +12,8 @@ var _isJSON = function _isJSON(string){
 		return false
 	}
 };
+
+var heightAndWidthMap = [];
 
 var JSONMarkdownService = function JSONMarkdownService(){};
 
@@ -24,6 +27,7 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 			console.log("error caught...");
 			return err;
 		});
+	//Currently: just valdiating headers.
 };
 
 JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerCells){
@@ -42,15 +46,16 @@ JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerC
 JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldArray, columnIndex){
 	var maxWidth = 0;
 	var columnValues = [];
+	var parsed;
 
 	for (var i = 0; i < fieldArray.length; i++){
 		var element = fieldArray[i][columnIndex];
-		var parsed = _isJSON(element);
+		parsed = _isJSON(element);
 		if (!parsed){
 			columnValues.push(element);
 			maxWidth = _.max([maxWidth, element.length]);
 		} else {
-			var JSONstring = JSON.stringify(element, " ", 2).split("\n");
+			var JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
 			columnValues.push(JSONstring);
 			// console.log("logging JSON string...");
 			// console.log(JSONstring);
@@ -62,11 +67,24 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 					]);
 		}
 	}
-
+	//
 	return {
 		maxWidth: maxWidth,
 		columnValues: columnValues
 	};
+};
+
+JSONMarkdownService.prototype.findRowHeight = function findRowHeight(fieldArray, rowIndex){
+	var maxHeight = 1; //the line height of a string.
+	var parsed;
+	for (var i = 0; i < fieldArray[0].length; i++){
+		var element = fieldArray[rowIndex][i];
+		parsed = _isJSON(element);
+		if (parsed){
+
+		}
+	}
+
 };
 
 JSONMarkdownService.prototype.constructColumns = function constructColumns(columnObject){
