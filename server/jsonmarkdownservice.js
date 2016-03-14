@@ -13,26 +13,42 @@ var _isJSON = function _isJSON(string){
 	}
 };
 
-var heightAndWidthMap = [];
+var columnObjects = [];
+var rowHeights = [];
 
 var JSONMarkdownService = function JSONMarkdownService(){};
 
-JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(cells){
-	return this.validateHeaders(cells[0])
+JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray){
+	var self = this;
+	return this.validateHeaders(fieldArray[0])
 		.then(function(response){
-			return response;
+			//construct the markdown table string only if the headers are valid.
+			for (var i = 0; i < fieldArray[0].length; i++){
+				columnObjects.push(self.findColumnWidth(fieldArray, i));
+			}
+
+			for (var j = 0; j < fieldArray.length; j++){
+				rowHeights.push(self.findRowHeight(fieldArray, j));
+			}
+			//add 
+
+			return {
+				reponse : response,
+				columnObjects : columnObjects,
+				rowHeights : rowHeights
+			};
 		})
 		.catch(function(err){
-			console.log("error caught...");
 			return err;
 		});
+
 	//Currently: just valdiating headers.
 };
 
 JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerCells){
 	return new Promise(function(resolve, reject){
 		_.each(headerCells, function(cell){
-			console.log(cell.value);
+			// console.log(cell.value);
 			//find a way to determine if a string is a valid variable name.
 			if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
 				 reject('The headers must all be non-JSON, non-empty strings');
@@ -58,7 +74,7 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 			columnValues.push(JSONstring);
 
 			var largestSubString = _.max(JSONstring, function(JSONStringLine){
-				console.log(JSONStringLine.length);
+				// console.log(JSONStringLine.length);
 				return JSONStringLine.length;
 			});
 			maxWidth = _.max([maxWidth, largestSubString.length]);
@@ -85,7 +101,8 @@ JSONMarkdownService.prototype.findRowHeight = function findRowHeight(fieldArray,
 	return maxHeight; //return the max height for the row.
 };
 
-JSONMarkdownService.prototype.constructColumns = function constructColumns(columnObject){
+JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject){
+	//for simplicity, render each column individually.
 	var cells = [];
 	for (var i = 0; i < columnObject.columnValues.length; i++){
 		cells[i] = "";

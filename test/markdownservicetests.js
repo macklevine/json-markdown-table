@@ -41,4 +41,20 @@ describe('jsonMarkdownService', function(){
 			done();
 		});
 	});
+	describe('.findRowHeight() method', function(done){
+		it('should find the tallest row in the fieldArray', function(done){
+			var maxHeight = jsonMarkdownService.findRowHeight(dummyInput3, 1);
+			expect(maxHeight).to.equal(4);
+			done();
+		});
+	});
+	describe('.createJSONMarkdownTable() method', function(done){
+		it('should create a map of values we can use to construct columns', function(done){
+			jsonMarkdownService.createJSONMarkdownTable(dummyInput1)
+				.then(function(response){
+					console.log(response);
+					done();
+				});
+		});
+	});
 });
