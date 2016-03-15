@@ -115,8 +115,14 @@ var _addHorizontalLine = function _addHorizontalLine(cell, maxWidth){
 	return cell;
 };
 
-var _addWhiteSpace = function _addWhiteSpace(){
-	//TODO: consider implementing to to refactor some blocks of code below.
+var _addCellValueAndWhiteSpace = function _addCellValueAndWhiteSpace(cell, whiteSpaceToAdd, cellValue){
+	cell += ('|' + cellValue);
+	while (whiteSpaceToAdd){
+		cell += " ";
+		whiteSpaceToAdd--;
+	}
+	cell += "|\n";
+	return cell;
 };
 
 /*
@@ -125,8 +131,10 @@ renders each column individually for simplicity.
 JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject){
 	//TODO: add white space based on row height.
 	var cells = [];
+	var whiteSpaceToAdd;
+	var currentCellHeight = 0;
 	for (var i = 0; i < columnObject.columnValues.length; i++){
-		var whiteSpaceToAdd = 0;
+		whiteSpaceToAdd = 0;
 		cells[i] = "";
 		//first cell in the column gets both top and bottom lines.
 		if (i === 0){
@@ -134,22 +142,24 @@ JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject)
 		}
 		if (typeof columnObject.columnValues[i] === 'string'){
 			whiteSpaceToAdd = columnObject.maxWidth - columnObject.columnValues[i].length;
-			cells[i] += ('|' + columnObject.columnValues[i]);
-			while (whiteSpaceToAdd){
-				cells[i] += " ";
-				whiteSpaceToAdd--;
+			cells[i] = _addCellValueAndWhiteSpace(cells[i], whiteSpaceToAdd, columnObject.columnValues[i]);
+			currentCellHeight++;
+
+			//now handle adjusting row height.			
+			whiteSpaceToAdd = columnObject.maxWidth;
+			while (currentCellHeight < rowHeights[i]){
+				cells[i] = _addCellValueAndWhiteSpace(cells[i], whiteSpaceToAdd, "");
+				currentCellHeight++;
 			}
-			cells[i] += "|\n";
 		} else if (typeof columnObject.columnValues[i] === 'object'){
 			for (var j = 0; j < columnObject.columnValues[i].length; j++){
 				whiteSpaceToAdd = columnObject.maxWidth - columnObject.columnValues[i][j].length;
-				cells[i] += ("|" + columnObject.columnValues[i][j]);
-				while (whiteSpaceToAdd){
-					cells[i] += " ";
-					whiteSpaceToAdd--;
-				}
-				cells[i] += "|\n";
+				cells[i] = _addCellValueAndWhiteSpace(cells[i], whiteSpaceToAdd, columnObject.columnValues[i][j]);
+				currentCellHeight++; //add one for each iteration.
 			}
+
+			//TODO: handle row height here.
+			//handle row height here...
 		}
 		cells[i] = _addHorizontalLine(cells[i], columnObject.maxWidth);
 	}
