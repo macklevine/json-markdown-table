@@ -63,8 +63,23 @@ describe('jsonMarkdownService', function(){
 	});
 	describe('.renderColumn() method', function(){
 		it('should give us a column rendered from the table map', function(){
+			//TODO: add the expected object here.
+			var expectedColumnObject1 = '|-------------------|\n' +
+																	'|header3            |\n' +
+																	'|-------------------|\n' +
+																	'|{                  |\n' +
+																	'|  "mack": "levine",|\n' +
+																	'|  "sara": "fraley" |\n' +
+																	'|}                  |\n' +
+																	'|-------------------|\n';
+
 			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
+			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[2])
+			expect(generatedColumnObject).to.equal(expectedColumnObject1);
 			console.log(jsonMarkdownService.renderColumn(tableMap.columnObjects[2]));
+		});
+		xit('should give us a column with cells that correctly scale to height of cells in adjacent rows', function(){
+
 		});
 	})
 });

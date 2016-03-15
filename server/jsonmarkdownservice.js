@@ -131,10 +131,10 @@ renders each column individually for simplicity.
 JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject){
 	//TODO: add white space based on row height.
 	var cells = [];
-	var whiteSpaceToAdd;
-	var currentCellHeight = 0;
+	var whiteSpaceToAdd, currentCellHeight;
 	for (var i = 0; i < columnObject.columnValues.length; i++){
 		whiteSpaceToAdd = 0;
+		currentCellHeight = 0;
 		cells[i] = "";
 		//first cell in the column gets both top and bottom lines.
 		if (i === 0){
@@ -158,16 +158,17 @@ JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject)
 				currentCellHeight++; //add one for each iteration.
 			}
 
-			//TODO: handle row height here.
-			//handle row height here...
+			whiteSpaceToAdd = columnObject.maxWidth;
+			while (currentCellHeight < rowHeights[i]){
+				cells[i] = _addCellValueAndWhiteSpace(cells[i], whiteSpaceToAdd, "");
+				currentCellHeight++;
+			}
 		}
 		cells[i] = _addHorizontalLine(cells[i], columnObject.maxWidth);
 	}
 	return _.reduce(cells, function(memo, item){
 		return memo + item;
 	});
-
-	//TODO: append all of the cells together and return them.
 };
 
 module.exports = new JSONMarkdownService();
