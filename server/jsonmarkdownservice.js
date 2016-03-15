@@ -16,7 +16,7 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 	return this.validateHeaders(fieldArray[0])
 		.then(function(response){
 			//construct the markdown table string only if the headers are valid.
-			self.createTableMap(fieldArray)
+			return self.createTableMap(fieldArray);
 
 		})
 		.catch(function(err){
@@ -103,25 +103,34 @@ JSONMarkdownService.prototype.findRowHeight = function findRowHeight(fieldArray,
 	return maxHeight; //return the max height for the row.
 };
 
-var _addHorizontalLine = function _addHorizontalLine(){
-	//TODO: refactor |---------------| construction algorithm here.
+/*
+adds horizontal lines that look like this: |--------|
+*/
+var _addHorizontalLine = function _addHorizontalLine(cell, maxWidth){
+	cell += '|';
+	for (var j = 0; j < maxWidth; j++){
+		cell += '-';
+	}
+	cell += '|\n';
+	return cell;
 };
 
-JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject){
-	//use the global rowHeights array within this function.
+var _addWhiteSpace = function _addWhiteSpace(){
+	//TODO: consider implementing to to refactor some blocks of code below.
+};
 
-	//for simplicity, render each column individually.
+/*
+renders each column individually for simplicity.
+*/
+JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject){
+	//TODO: add white space based on row height.
 	var cells = [];
 	for (var i = 0; i < columnObject.columnValues.length; i++){
 		var whiteSpaceToAdd = 0;
 		cells[i] = "";
 		//first cell in the column gets both top and bottom lines.
 		if (i === 0){
-			cells[i] += '|';
-			for (var j = 0; j < maxWidth.length; j++){
-				cells[i] += '-';
-			}
-			cells[i] += '|\n';
+			cells[i] = _addHorizontalLine(cells[i], columnObject.maxWidth);
 		}
 		if (typeof columnObject.columnValues[i] === 'string'){
 			whiteSpaceToAdd = columnObject.maxWidth - columnObject.columnValues[i].length;
@@ -130,16 +139,19 @@ JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject)
 				cells[i] += " ";
 				whiteSpaceToAdd--;
 			}
-			cells[i] += "\n";
+			cells[i] += "|\n";
 		} else if (typeof columnObject.columnValues[i] === 'object'){
-			//add special logic here that deals with multi-line values.
-		}
-		//add the bottom line at the end of each cell.
-		cells[i] += '|';
-		for (var j = 0; j < maxWidth.length; j++){
-				cells[i] += '-';
+			for (var j = 0; j < columnObject.columnValues[i].length; j++){
+				whiteSpaceToAdd = columnObject.maxWidth - columnObject.columnValues[i][j].length;
+				cells[i] += ("|" + columnObject.columnValues[i][j]);
+				while (whiteSpaceToAdd){
+					cells[i] += " ";
+					whiteSpaceToAdd--;
+				}
+				cells[i] += "|\n";
 			}
-		cells[i] += '|\n';
+		}
+		cells[i] = _addHorizontalLine(cells[i], columnObject.maxWidth);
 	}
 	return _.reduce(cells, function(memo, item){
 		return memo + item;

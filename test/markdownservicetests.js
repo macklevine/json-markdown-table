@@ -49,7 +49,7 @@ describe('jsonMarkdownService', function(){
 			done();
 		});
 	});
-	describe('.createTableMap() method', function(done){
+	describe('.createTableMap() method', function(){
 		it('should create a map of values we can use to construct columns', function(){
 			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
 			expect(_.has(tableMap, 'columnObjects')).to.be.ok;
@@ -61,4 +61,10 @@ describe('jsonMarkdownService', function(){
 			});
 		});
 	});
+	describe('.renderColumn() method', function(){
+		it('should give us a column rendered from the table map', function(){
+			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
+			console.log(jsonMarkdownService.renderColumn(tableMap.columnObjects[2]));
+		});
+	})
 });
