@@ -74,7 +74,7 @@ describe('jsonMarkdownService', function(){
 																	'|-------------------|\n';
 
 			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
-			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[2]);
+			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[2], tableMap.rowHeights);
 			expect(generatedColumnObject).to.equal(expectedColumnObject1);
 			console.log(generatedColumnObject);
 		});
@@ -89,7 +89,7 @@ describe('jsonMarkdownService', function(){
 							                    '|-------|\n';
 
 			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
-			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[0]);
+			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[0], tableMap.rowHeights);
 			expect(generatedColumnObject).to.equal(expectedColumnObject2);
 			console.log(generatedColumnObject);
 		});

@@ -5,10 +5,6 @@ var Promise = require('bluebird');
 
 //TODO: see if there is an easy way to replace for/in loops with _.each.
 
-
-var columnObjects = [];
-var rowHeights = [];
-
 var JSONMarkdownService = function JSONMarkdownService(){};
 
 JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray){
@@ -16,7 +12,7 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 	return this.validateHeaders(fieldArray[0])
 		.then(function(response){
 			//construct the markdown table string only if the headers are valid.
-			return self.createTableMap(fieldArray);
+			var tableMap = self.createTableMap(fieldArray);
 
 		})
 		.catch(function(err){
@@ -26,6 +22,10 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 
 JSONMarkdownService.prototype.createTableMap = function createTableMap(fieldArray){
 	var self = this;
+
+	var columnObjects = [];
+	var rowHeights = [];
+
 	for (var i = 0; i < fieldArray[0].length; i++){
 		columnObjects.push(self.findColumnWidth(fieldArray, i));
 	}
@@ -128,7 +128,7 @@ var _addCellValueAndWhiteSpace = function _addCellValueAndWhiteSpace(cell, white
 /*
 renders each column individually for simplicity.
 */
-JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject){
+JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject, rowHeights){
 	//TODO: add white space based on row height.
 	var cells = [];
 	var whiteSpaceToAdd, currentCellHeight;
