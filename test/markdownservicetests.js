@@ -74,12 +74,24 @@ describe('jsonMarkdownService', function(){
 																	'|-------------------|\n';
 
 			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
-			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[2])
+			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[2]);
 			expect(generatedColumnObject).to.equal(expectedColumnObject1);
-			console.log(jsonMarkdownService.renderColumn(tableMap.columnObjects[2]));
+			console.log(generatedColumnObject);
 		});
-		xit('should give us a column with cells that correctly scale to height of cells in adjacent rows', function(){
+		it('should give us a column with cells that correctly scale to height of cells in adjacent rows', function(){
+			var expectedColumnObject2 = '|-------|\n'+
+							                    '|header1|\n'+
+							                    '|-------|\n'+
+							                    '|value1 |\n'+
+							                    '|       |\n'+
+							                    '|       |\n'+
+							                    '|       |\n'+
+							                    '|-------|\n';
 
+			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
+			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[0]);
+			expect(generatedColumnObject).to.equal(expectedColumnObject2);
+			console.log(generatedColumnObject);
 		});
 	})
 });
