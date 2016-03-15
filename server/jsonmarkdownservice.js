@@ -9,11 +9,19 @@ var JSONMarkdownService = function JSONMarkdownService(){};
 
 JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray){
 	var self = this;
+	//construct the markdown table string only if the headers are valid.
 	return this.validateHeaders(fieldArray[0])
 		.then(function(response){
-			//construct the markdown table string only if the headers are valid.
+			var columns = [];
 			var tableMap = self.createTableMap(fieldArray);
-
+			for (var i = 0; i < tableMap.columnObjects.length; i++){
+				columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
+			}
+			console.log(columns);
+			return {
+				response : response,
+				columns : columns
+			}
 		})
 		.catch(function(err){
 			return err;
