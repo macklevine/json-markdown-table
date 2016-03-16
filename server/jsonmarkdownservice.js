@@ -13,15 +13,18 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 	return this.validateHeaders(fieldArray[0])
 		.then(function(response){
 			var columns = [];
+			var splitColumns = [];
 			var tableMap = self.createTableMap(fieldArray);
 			for (var i = 0; i < tableMap.columnObjects.length; i++){
 				columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
+				console.log(columns[i]);
+				splitColumns.push(columns[i].split('\n'));
+				console.log(splitColumns[i]);
 			}
-			console.log(columns);
+
 			return {
-				response : response,
-				columns : columns
-			}
+				response : response
+			};
 		})
 		.catch(function(err){
 			return err;
@@ -177,6 +180,16 @@ JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject,
 	return _.reduce(cells, function(memo, item){
 		return memo + item;
 	});
+};
+
+JSONMarkdownService.prototype.appendColumns = function(columns){
+	var splitColumns = [];
+	_.each(columns, function(column){
+		column.split('\n');
+		splitColumns.push(column);
+	});
+	return splitColumns;
+	//write a couple of nested for loops down here.
 };
 
 module.exports = new JSONMarkdownService();

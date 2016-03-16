@@ -98,9 +98,8 @@ describe('jsonMarkdownService', function(){
 		it('should give us a complete JSON markdown table when invoked with data from the front end', function(done){
 			jsonMarkdownService.createJSONMarkdownTable(dummyInput1)
 				.then(function(response){
-					console.log(response);
 					done();
 				});
-		})
+		});
 	});
 });
