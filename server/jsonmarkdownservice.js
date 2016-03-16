@@ -17,13 +17,14 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 			var tableMap = self.createTableMap(fieldArray);
 			for (var i = 0; i < tableMap.columnObjects.length; i++){
 				columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
-				console.log(columns[i]);
+				// console.log(columns[i]);
 				splitColumns.push(columns[i].split('\n'));
-				console.log(splitColumns[i]);
+				// console.log(splitColumns[i]);
 			}
-
 			return {
-				response : response
+				response : response,
+				columns : columns,
+				tableString : self.appendColumns(splitColumns)
 			};
 		})
 		.catch(function(err){
@@ -182,13 +183,28 @@ JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject,
 	});
 };
 
-JSONMarkdownService.prototype.appendColumns = function(columns){
-	var splitColumns = [];
-	_.each(columns, function(column){
-		column.split('\n');
-		splitColumns.push(column);
-	});
-	return splitColumns;
+JSONMarkdownService.prototype.appendColumns = function(splitColumns){
+	//TODO: list and declare these variables using commas.
+	var lines = [];
+	var line = [];
+	var subLine = "";
+	var chopLength;
+	for (var i = 0; i < splitColumns[0].length; i++){
+		for (var j = 0; j < splitColumns.length; j++){
+			subLine = splitColumns[j][i];
+			chopLength = subLine.length - 1;
+			if (j < (splitColumns.length - 1)){
+				line.push(subLine.slice(0, chopLength));
+			} 
+			else {
+				line.push(subLine);
+			}
+		}
+		line = line.join('');
+		lines.push(line);
+		line = [];
+	}
+	return lines.join('\n');
 	//write a couple of nested for loops down here.
 };
 
