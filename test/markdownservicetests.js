@@ -94,11 +94,20 @@ describe('jsonMarkdownService', function(){
 			console.log(generatedColumnObject);
 		});
 	});
-	describe('whole flow', function(){
+	describe('.createJSONMarkdownTable() method', function(){
 		it('should give us a complete JSON markdown table when invoked with data from the front end', function(done){
+			var expectedTableObject =  '|-------|-------|-------------------|\n'+
+																 '|header1|header2|header3            |\n'+
+																 '|-------|-------|-------------------|\n'+
+																 '|value1 |value2 |{                  |\n'+
+																 '|       |       |  "mack": "levine",|\n'+
+																 '|       |       |  "sara": "fraley" |\n'+
+																 '|       |       |}                  |\n'+
+																 '|-------|-------|-------------------|\n';
 			jsonMarkdownService.createJSONMarkdownTable(dummyInput1)
 				.then(function(response){
 					console.log(response.tableString);
+					expect(response.tableString).to.equal(expectedTableObject);
 					done();
 				});
 		});
