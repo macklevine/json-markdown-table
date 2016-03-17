@@ -12,17 +12,20 @@
 <div ng-app="inputModule" ng-controller="inputController">
 	<form name="headerForm">
 		<div class="row" ng-repeat="row in inputRows">
-	 		<input type="text" default-value="cell.value" ng-model="cell.value" ng-repeat="cell in row">
+	 		<input class="datacell" type="text" default-value="cell.value" ng-model="cell.value" ng-repeat="cell in row">
 	 	</div>
  		<button ng-click="addColumn()">add column</button>
  		<button ng-click="removeColumn()">remove column</button>
  		<button ng-click="addRow()">add row</button>
  		<button ng-click="removeRow()">remove row</button>
- 		<button ng-click="submitHeaders()">Generate Table</button>
+ 		<button ng-click="submitCells()">Generate Table</button>
  	</form>
  	<div>
  		<textarea class="tablebox" readonly>{{textAreaVal}}</textarea>
  	</div>
+  <div>
+    <a href="http://www.github.com/macklevine">by Mack Levine</a>
+  </div>
 </div>
 
 </body>
