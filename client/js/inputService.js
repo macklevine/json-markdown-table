@@ -3,16 +3,14 @@ angular.module('input.inputServices', [])
 		var sendInputData = function(data){
 			return $http.post('/sendfields', data)
 				.then(function(response){
-					//get the response string here.
-					console.log(response.data);
 					return $q.resolve(response);
 				},
 				function(rejection){
-					console.log(rejection.data);
+					//handles if headers are determined to be invalid.
 					return $q.reject(rejection);
 				});
-		}
+		};
 		return {
 			sendInputData : sendInputData
-		}
+		};
 	});

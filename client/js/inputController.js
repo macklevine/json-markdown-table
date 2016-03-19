@@ -15,11 +15,13 @@ angular.module('input.inputController', [])
   $scope.submitCells = function submitCells(){
     InputService.sendInputData($scope.inputRows)
       .then(function(response){
-        var tableString = response.data.tableString;
-        $scope.textAreaVal = tableString;
-      })
-      .catch(function(err){
-        console.log(err.message);
+        if (response && response.data.tableString){
+          var tableString = response.data.tableString;
+          $scope.textAreaVal = tableString;
+        } else {
+          $scope.textAreaVal = response.data;
+          //TODO: add a css class to textAreaVal making the input text red.
+        }
       });
   }
   $scope.addColumn = function removeColumn(){
