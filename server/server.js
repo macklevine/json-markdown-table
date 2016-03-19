@@ -3,6 +3,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = require('./routeconfigurators/routes');
+var config = require('../config').settings;
 
 var app = express();
 app.use(bodyParser.json());
@@ -12,6 +13,6 @@ app.use(express.static(__dirname + "/../client/js/"));
 //configure routes
 router.configureRoutes(app);
 
-app.listen(8123, function(){
-	console.log("listening on port 8123");
+app.listen(config.port, function(){
+	console.log("listening on port " + config.port);
 });
