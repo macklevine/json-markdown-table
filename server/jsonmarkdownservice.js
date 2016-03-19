@@ -65,7 +65,7 @@ JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerC
 			// console.log(cell.value);
 			//find a way to determine if a string is a valid variable name.
 			if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
-				 reject('The headers must all be non-JSON, non-empty strings');
+				 reject(new Error('The headers must all be non-JSON, non-empty strings'));
 			}
 		});
 		resolve("the headers look good.");
