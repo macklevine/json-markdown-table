@@ -10,6 +10,7 @@ angular.module('input.inputController', [])
       {value:'value2'}
     ]
   ];
+  $scope.errorResponse = false;
   $scope.textAreaVal = "table will show up here...";
   //initialize columns here.
   $scope.submitCells = function submitCells(){
@@ -18,8 +19,10 @@ angular.module('input.inputController', [])
         if (response && response.data.tableString){
           var tableString = response.data.tableString;
           $scope.textAreaVal = tableString;
+          $scope.errorResponse = false;
         } else {
           $scope.textAreaVal = response.data;
+          $scope.errorResponse = true;
           //TODO: add a css class to textAreaVal making the input text red.
         }
       });

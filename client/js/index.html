@@ -21,7 +21,7 @@
  		<button ng-click="submitCells()">Generate Table</button>
  	</form>
  	<div>
- 		<textarea class="tablebox" readonly>{{textAreaVal}}</textarea>
+ 		<textarea class="tablebox" ng-class="{'errorresponse':errorResponse}" readonly>{{textAreaVal}}</textarea>
  	</div>
   <div>
     <a href="http://www.github.com/macklevine">by Mack Levine</a>
