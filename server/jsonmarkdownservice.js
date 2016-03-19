@@ -17,9 +17,7 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 			var tableMap = self.createTableMap(fieldArray);
 			for (var i = 0; i < tableMap.columnObjects.length; i++){
 				columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
-				// console.log(columns[i]);
 				splitColumns.push(columns[i].split('\n'));
-				// console.log(splitColumns[i]);
 			}
 			return {
 				response : response,
@@ -28,7 +26,7 @@ JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkd
 			};
 		})
 		.catch(function(err){
-			return err;
+			return err.message;
 		});
 };
 
@@ -62,10 +60,9 @@ var _isJSON = function _isJSON(string){
 JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerCells){
 	return new Promise(function(resolve, reject){
 		_.each(headerCells, function(cell){
-			// console.log(cell.value);
 			//find a way to determine if a string is a valid variable name.
 			if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
-				 reject(new Error('The headers must all be non-JSON, non-empty strings'));
+				reject(new Error('The headers must all be non-JSON, non-empty strings'));
 			}
 		});
 		resolve("the headers look good.");
@@ -88,7 +85,6 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 			columnValues.push(JSONstring);
 
 			var largestSubString = _.max(JSONstring, function(JSONStringLine){
-				// console.log(JSONStringLine.length);
 				return JSONStringLine.length;
 			});
 			maxWidth = _.max([maxWidth, largestSubString.length]);

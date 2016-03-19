@@ -1,15 +1,14 @@
 angular.module('input.inputServices', [])
 	.factory('InputService', function ($http, $q){
 		var sendInputData = function(data){
-			console.log(data);
 			return $http.post('/sendfields', data)
 				.then(function(response){
 					//get the response string here.
-					console.log(response);
-					console.log("getting response...");
+					console.log(response.data);
 					return $q.resolve(response);
 				},
 				function(rejection){
+					console.log(rejection.data);
 					return $q.reject(rejection);
 				});
 		}

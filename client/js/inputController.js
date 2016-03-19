@@ -13,12 +13,13 @@ angular.module('input.inputController', [])
   $scope.textAreaVal = "table will show up here...";
   //initialize columns here.
   $scope.submitCells = function submitCells(){
-    console.log($scope.inputRows);
     InputService.sendInputData($scope.inputRows)
       .then(function(response){
         var tableString = response.data.tableString;
-        console.log(tableString);
         $scope.textAreaVal = tableString;
+      })
+      .catch(function(err){
+        console.log(err.message);
       });
   }
   $scope.addColumn = function removeColumn(){
