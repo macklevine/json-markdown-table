@@ -22,4 +22,4 @@ Mack Levine
 
 ## License
 
-TODO: Write license
+[MIT](LICENSE)
