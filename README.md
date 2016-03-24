@@ -49,9 +49,11 @@ For the above object, .createJSONMarkdownTable() will return a string that looks
 
 ## Contributing
 
-## History
+TBD
 
-TODO: Write history
+## Improvements!
+
+TODO: add the ability to accept Objects as cell values. Identify them, and stringify them.
 
 ## Credits
 
