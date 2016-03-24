@@ -1,5 +1,5 @@
 'use strict';
 
-var JSONMarkdownService = require('./server/jsonmarkdownservice');
+var JSONMarkdownService = require('./jsonmarkdowntable');
 
-module.exports = JSONMarkdownService.createJSONMarkdownTable;
+module.exports = JSONMarkdownService;

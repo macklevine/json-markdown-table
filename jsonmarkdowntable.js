@@ -1,36 +1,29 @@
 'use strict';
 
 var _ = require('underscore');
-var Promise = require('bluebird');
 
 //TODO: see if there is an easy way to replace for/in loops with _.each.
 
-var JSONMarkdownService = function JSONMarkdownService(){};
+var JSONMarkdownTable = function JSONMarkdownTable(){};
 
-JSONMarkdownService.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray){
+JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray){
 	var self = this;
 	//construct the markdown table string only if the headers are valid.
-	return this.validateHeaders(fieldArray[0])
-		.then(function(response){
-			var columns = [];
-			var splitColumns = [];
-			var tableMap = self.createTableMap(fieldArray);
-			for (var i = 0; i < tableMap.columnObjects.length; i++){
-				columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
-				splitColumns.push(columns[i].split('\n'));
-			}
-			return {
-				response : response,
-				columns : columns,
-				tableString : self.appendColumns(splitColumns)
-			};
-		})
-		.catch(function(err){
-			return err.message;
-		});
+	if (!this.validateHeaders(fieldArray[0])) return "The headers must be non-JSON, non-empty strings.";
+	var columns = [];
+	var splitColumns = [];
+	var tableMap = self.createTableMap(fieldArray);
+	for (var i = 0; i < tableMap.columnObjects.length; i++){
+		columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
+		splitColumns.push(columns[i].split('\n'));
+	}
+	return {
+		columns : columns,
+		tableString : self.appendColumns(splitColumns)
+	};
 };
 
-JSONMarkdownService.prototype.createTableMap = function createTableMap(fieldArray){
+JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray){
 	var self = this;
 
 	var columnObjects = [];
@@ -53,23 +46,24 @@ var _isJSON = function _isJSON(string){
 	try {
 		return JSON.parse(string);
 	} catch (e) {
-		return false
+		return false;
 	}
 };
 
-JSONMarkdownService.prototype.validateHeaders = function validateHeaders(headerCells){
-	return new Promise(function(resolve, reject){
-		_.each(headerCells, function(cell){
-			//find a way to determine if a string is a valid variable name.
-			if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
-				reject(new Error('The headers must all be non-JSON, non-empty strings'));
-			}
-		});
-		resolve("the headers look good.");
+JSONMarkdownTable.prototype.validateHeaders = function validateHeaders(headerCells){
+	var headersAreValid = true;
+	_.each(headerCells, function(cell){
+		//TODO: find a way to determine if a string is a valid variable name.
+		if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
+			headersAreValid = false;
+			return false; //TODO: this is how you break out of a loop in lodash _.each.
+			//check to see if this is the case for underscore as well.
+		}
 	});
+	return headersAreValid;
 };
 
-JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldArray, columnIndex){
+JSONMarkdownTable.prototype.findColumnWidth = function findColumnWidth(fieldArray, columnIndex){
 	var maxWidth = 0;
 	var columnValues = [];
 	var parsed, JSONstring;
@@ -97,7 +91,7 @@ JSONMarkdownService.prototype.findColumnWidth = function findColumnWidth(fieldAr
 	};
 };
 
-JSONMarkdownService.prototype.findRowHeight = function findRowHeight(fieldArray, rowIndex){
+JSONMarkdownTable.prototype.findRowHeight = function findRowHeight(fieldArray, rowIndex){
 	var maxHeight = 1; //the line height of a string.
 	var parsed, JSONstring;
 	for (var i = 0; i < fieldArray[0].length; i++){
@@ -136,7 +130,7 @@ var _addCellValueAndWhiteSpace = function _addCellValueAndWhiteSpace(cell, white
 /*
 renders each column individually for simplicity.
 */
-JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject, rowHeights){
+JSONMarkdownTable.prototype.renderColumn = function renderColumn(columnObject, rowHeights){
 	//TODO: add white space based on row height.
 	var cells = [];
 	var whiteSpaceToAdd, currentCellHeight;
@@ -179,7 +173,7 @@ JSONMarkdownService.prototype.renderColumn = function renderColumn(columnObject,
 	});
 };
 
-JSONMarkdownService.prototype.appendColumns = function(splitColumns){
+JSONMarkdownTable.prototype.appendColumns = function(splitColumns){
 	//TODO: list and declare these variables using commas.
 	var lines = [];
 	var line = [];
@@ -204,5 +198,5 @@ JSONMarkdownService.prototype.appendColumns = function(splitColumns){
 	//write a couple of nested for loops down here.
 };
 
-module.exports = new JSONMarkdownService();
+module.exports = new JSONMarkdownTable();
 
