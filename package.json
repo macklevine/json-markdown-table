@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Mack Levine",
+  "license": "MIT",
   "dependencies": {
     "chai": "^3.5.0",
     "underscore": "^1.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/macklevine/json-markdown-table.git"
   }
 }
