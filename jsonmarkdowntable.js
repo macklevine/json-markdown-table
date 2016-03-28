@@ -1,6 +1,18 @@
 'use strict';
 
-var _ = require('underscore');
+var _;
+
+try{
+	_ = require('underscore');
+} catch(e){
+	_ = {
+		each : function (collection, iteratee){
+			for (var i = 0; i < collection.length; i++){
+				iteratee(collection[i], i, collection);
+			}
+		}
+	}
+}
 
 //TODO: see if there is an easy way to replace for/in loops with _.each.
 
@@ -48,7 +60,7 @@ JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray)
 	_.each(fieldArray, function(item, index){
 		rowHeights.push(self.findRowHeight(fieldArray, index));
 	});
-	
+
 	return {
 		columnObjects : columnObjects,
 		rowHeights : rowHeights

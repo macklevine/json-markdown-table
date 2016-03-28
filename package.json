@@ -8,7 +8,7 @@
   },
   "author": "Mack Levine",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "chai": "^3.5.0",
     "underscore": "^1.8.3"
   },
