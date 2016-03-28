@@ -6,10 +6,19 @@ var _ = require('underscore');
 
 var JSONMarkdownTable = function JSONMarkdownTable(){};
 
-JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray){
+JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray, callback){
 	var self = this;
+	if(callback){
+
+	}
 	//construct the markdown table string only if the headers are valid.
-	if (!this.validateHeaders(fieldArray[0])) return "The headers must be non-JSON, non-empty strings.";
+	if (!this.validateHeaders(fieldArray[0])){
+		if(callback){
+			callback(new Error("The headers must be non-JSON, non-empty strings."));
+		} else {
+			return "The headers must be non-JSON, non-empty strings.";
+		}
+	}
 	var columns = [];
 	var splitColumns = [];
 	var tableMap = self.createTableMap(fieldArray);
@@ -17,10 +26,17 @@ JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdow
 		columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
 		splitColumns.push(columns[i].split('\n'));
 	}
-	return {
-		columns : columns,
-		tableString : self.appendColumns(splitColumns)
-	};
+	if(callback){
+		callback(null, {
+			columns : columns,
+			tableString : self.appendColumns(splitColumns)
+		});
+	} else {
+		return {
+			columns : columns,
+			tableString : self.appendColumns(splitColumns)
+		};
+	}
 };
 
 JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray){
