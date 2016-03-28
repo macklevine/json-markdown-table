@@ -19,10 +19,10 @@ JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdow
 	var columns = [];
 	var splitColumns = [];
 	var tableMap = self.createTableMap(fieldArray);
-	for (var i = 0; i < tableMap.columnObjects.length; i++){
-		columns.push(self.renderColumn(tableMap.columnObjects[i], tableMap.rowHeights));
-		splitColumns.push(columns[i].split('\n'));
-	}
+	_.each(tableMap.columnObjects, function(columnObject, index, columnObjects){
+		columns.push(self.renderColumn(columnObject, tableMap.rowHeights));
+		splitColumns.push(columns[index].split('\n'));
+	});
 	if(callback){
 		callback(null, {
 			columns : columns,
@@ -42,13 +42,13 @@ JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray)
 	var columnObjects = [];
 	var rowHeights = [];
 
-	for (var i = 0; i < fieldArray[0].length; i++){
-		columnObjects.push(self.findColumnWidth(fieldArray, i));
-	}
-
-	for (var j = 0; j < fieldArray.length; j++){
-		rowHeights.push(self.findRowHeight(fieldArray, j));
-	}
+	_.each(fieldArray[0], function(item, index){
+		columnObjects.push(self.findColumnWidth(fieldArray, index));
+	});
+	_.each(fieldArray, function(item, index){
+		rowHeights.push(self.findRowHeight(fieldArray, index));
+	});
+	
 	return {
 		columnObjects : columnObjects,
 		rowHeights : rowHeights
