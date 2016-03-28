@@ -11,7 +11,7 @@ JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdow
 	//construct the markdown table string only if the headers are valid.
 	if (!this.validateHeaders(fieldArray[0])){
 		if(callback){
-			callback(new Error("The headers must be non-JSON, non-empty strings."));
+			return callback(new Error("The headers must be non-JSON, non-empty strings."));
 		} else {
 			return "The headers must be non-JSON, non-empty strings.";
 		}
