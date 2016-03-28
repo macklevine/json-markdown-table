@@ -8,9 +8,6 @@ var JSONMarkdownTable = function JSONMarkdownTable(){};
 
 JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray, callback){
 	var self = this;
-	if(callback){
-
-	}
 	//construct the markdown table string only if the headers are valid.
 	if (!this.validateHeaders(fieldArray[0])){
 		if(callback){
