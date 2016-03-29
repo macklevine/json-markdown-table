@@ -31,7 +31,7 @@ Data for a markdown table will look something like this:
       "value" : "value2" 
     },
     { 
-      "value" : '{"mack":"levine","sara\":"fraley"}'
+      "value" : '{"mack":"levine","sara":"fraley"}'
     } 
   ] 
 ]
