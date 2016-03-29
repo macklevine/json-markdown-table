@@ -96,5 +96,11 @@ describe('jsonMarkdownService', function(){
 			var response = jsonMarkdownService.createJSONMarkdownTable(dummyInput1);
 			expect(response.tableString).to.equal(expectedTableObject);
 		});
+		xit('should work OK when invoked with data that has an non-stringified object for one of the cells', function(){
+			dummyInput1[1][2] = {mack:"levine",sara:"fraley"};
+			var response = jsonMarkdownService.createJSONMarkdownTable(dummyInput2);
+			console.log(response);
+			console.log("what happened?");
+		});
 	});
 });
