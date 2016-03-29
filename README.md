@@ -31,7 +31,7 @@ Data for a markdown table will look something like this:
       "value" : "value2" 
     },
     { 
-      "value" : "{\"mack\":\"levine\",\"sara\":\"fraley\"}" 
+      "value" : '{"mack":"levine","sara\":"fraley"}'
     } 
   ] 
 ]
@@ -39,11 +39,15 @@ Data for a markdown table will look something like this:
 For the above object, .createJSONMarkdownTable() will return a string that looks like this:
 
 ```
-|-------|-------|-----------------------------------|
-|header1|header2|header3                            |
-|-------|-------|-----------------------------------|
-|value1 |value2 |"{"mack":"levine","sara":"fraley"}"|
-|-------|-------|-----------------------------------|
+|-------|-------|-------------------|
+|header1|header2|header3            |
+|-------|-------|-------------------|
+|value1 |value2 |{                  |
+|       |       |  "mack": "levine",|
+|       |       |  "sara": "fraley" |
+|       |       |}                  |
+|-------|-------|-------------------|
+
 
 ```
 
