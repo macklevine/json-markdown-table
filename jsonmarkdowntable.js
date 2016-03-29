@@ -2,16 +2,14 @@
 
 var _;
 
+//TODO: modularize this factory.
+
 try{
 	_ = require('underscore');
 } catch(e){
-	_ = {
-		each : function (collection, iteratee){
-			for (var i = 0; i < collection.length; i++){
-				iteratee(collection[i], i, collection);
-			}
-		}
-	}
+	var UnderscoreFactory = require('./util/underscoresurrogates');
+	_ = new UnderscoreFactory();
+	console.log("error caught.");
 }
 
 //TODO: see if there is an easy way to replace for/in loops with _.each.
