@@ -7,11 +7,17 @@ var _;
 try{
 	_ = require('underscore');
 } catch(e){
-	var UnderscoreFactory = require('./util/underscoresurrogates');
-	_ = new UnderscoreFactory();
+	try {
+		_ = require('lodash');
+	} catch(e){
+		var UnderscoreFactory = require('./util/underscoresurrogates');
+		_ = new UnderscoreFactory();
+	}
 }
 
-//TODO: see if there is an easy way to replace for/in loops with _.each.
+//TODO: write a CLI https://developer.atlassian.com/blog/2015/11/scripting-with-node/
+
+//TODO: continue replacing for/in loops with _.each.
 
 var JSONMarkdownTable = function JSONMarkdownTable(){};
 

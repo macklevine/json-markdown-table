@@ -80,7 +80,7 @@ describe('jsonMarkdownService', function(){
 			var tableMap = jsonMarkdownService.createTableMap(dummyInput1);
 			var generatedColumnObject = jsonMarkdownService.renderColumn(tableMap.columnObjects[0], tableMap.rowHeights);
 			expect(generatedColumnObject).to.equal(expectedColumnObject2);
-			console.log(generatedColumnObject);
+			// console.log(generatedColumnObject);
 		});
 	});
 	describe('.createJSONMarkdownTable() method', function(){
@@ -103,10 +103,17 @@ describe('jsonMarkdownService', function(){
 					sara: "fraley"
 				}
 			};
+			var expectedTableObject =  '|-------|-------|-------------------|\n'+
+																 '|header1|header2|header3            |\n'+
+																 '|-------|-------|-------------------|\n'+
+																 '|value1 |value2 |{                  |\n'+
+																 '|       |       |  "mack": "levine",|\n'+
+																 '|       |       |  "sara": "fraley" |\n'+
+																 '|       |       |}                  |\n'+
+																 '|-------|-------|-------------------|\n';
 			var response = jsonMarkdownService.createJSONMarkdownTable(dummyInput1);
-			for(var i = 0; i < response.columns.length; i++){
-				console.log(response.columns[i]);
-			}
+			console.log(response.tableString);
+			expect(response.tableString).to.equal(expectedTableObject);
 		});
 	});
 });
