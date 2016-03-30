@@ -9,7 +9,6 @@ try{
 } catch(e){
 	var UnderscoreFactory = require('./util/underscoresurrogates');
 	_ = new UnderscoreFactory();
-	console.log("error caught.");
 }
 
 //TODO: see if there is an easy way to replace for/in loops with _.each.
@@ -65,19 +64,41 @@ JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray)
 	};
 };
 
-var _isJSON = function _isJSON(string){
-	try {
-		return JSON.parse(string);
-	} catch (e) {
-		return false;
+/*
+determines whether an input is a JSON string, a regular string, or an object.
+returns an object with two properties: value and type.
+*/
+var _isJSONStringOrObject = function _isJSONStringOrObject(stringOrObject){
+	if(typeof stringOrObject === 'object'){
+		return {
+			value: stringOrObject,
+			type: "JSON"
+		}
+	} else {
+		try {
+			return {
+				value: JSON.parse(stringOrObject),
+				type: "JSON"
+			}
+		} catch (e) {
+			return {
+				value: stringOrObject,
+				type: "String"
+			};
+		}
 	}
 };
 
+
+/*
+Validates the headers of a provided input (the zeroeth element.)
+ */
 JSONMarkdownTable.prototype.validateHeaders = function validateHeaders(headerCells){
 	var headersAreValid = true;
 	_.each(headerCells, function(cell){
 		//TODO: find a way to determine if a string is a valid variable name.
-		if(_isJSON(cell.value) || typeof cell.value !== 'string' || cell.value === ""){
+		//Make this a configurable option.
+		if(_isJSONStringOrObject(cell.value).type === 'JSON' || typeof cell.value !== 'string' || cell.value === ""){
 			headersAreValid = false;
 			return false; //TODO: this is how you break out of a loop in lodash _.each.
 			//check to see if this is the case for underscore as well.
@@ -93,12 +114,12 @@ JSONMarkdownTable.prototype.findColumnWidth = function findColumnWidth(fieldArra
 
 	for (var i = 0; i < fieldArray.length; i++){
 		var element = fieldArray[i][columnIndex].value;
-		parsed = _isJSON(element);
-		if (!parsed){
+		parsed = _isJSONStringOrObject(element);
+		if (parsed.type === "String"){
 			columnValues.push(element);
 			maxWidth = _.max([maxWidth, element.length]);
 		} else {
-			JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
+			JSONstring = JSON.stringify(parsed.value, " ", 2).split("\n");
 			columnValues.push(JSONstring);
 
 			var largestSubString = _.max(JSONstring, function(JSONStringLine){
@@ -119,9 +140,9 @@ JSONMarkdownTable.prototype.findRowHeight = function findRowHeight(fieldArray, r
 	var parsed, JSONstring;
 	for (var i = 0; i < fieldArray[0].length; i++){
 		var element = fieldArray[rowIndex][i].value;
-		parsed = _isJSON(element);
-		if (parsed){
-			JSONstring = JSON.stringify(parsed, " ", 2).split("\n");
+		parsed = _isJSONStringOrObject(element);
+		if (parsed.type === "JSON"){
+			JSONstring = JSON.stringify(parsed.value, " ", 2).split("\n");
 			maxHeight = _.max([maxHeight, JSONstring.length]);
 		}
 	}
