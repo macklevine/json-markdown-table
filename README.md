@@ -50,6 +50,7 @@ For the above object, .createJSONMarkdownTable() will return a string that looks
 
 
 ```
+.createJSONMarkdownTable() will accept JSON object cell values as both strings and objects.
 
 ## Contributing
 
