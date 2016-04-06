@@ -118,12 +118,12 @@ JSONMarkdownTable.prototype.findColumnWidth = function findColumnWidth(fieldArra
 	var columnValues = [];
 	var parsed, JSONstring;
 
-	for (var i = 0; i < fieldArray.length; i++){
-		var element = fieldArray[i][columnIndex].value;
-		parsed = _isJSONStringOrObject(element);
+	_.each(fieldArray, function(row){
+		var cell = row[columnIndex].value;
+		parsed = _isJSONStringOrObject(cell);
 		if (parsed.type === "String"){
-			columnValues.push(element);
-			maxWidth = _.max([maxWidth, element.length]);
+			columnValues.push(cell);
+			maxWidth = _.max([maxWidth, cell.length]);
 		} else {
 			JSONstring = JSON.stringify(parsed.value, " ", 2).split("\n");
 			columnValues.push(JSONstring);
@@ -133,8 +133,7 @@ JSONMarkdownTable.prototype.findColumnWidth = function findColumnWidth(fieldArra
 			});
 			maxWidth = _.max([maxWidth, largestSubString.length]);
 		}
-	}
-	//
+	});
 	return {
 		maxWidth: maxWidth,
 		columnValues: columnValues
