@@ -16,8 +16,8 @@ try{
 }
 
 //TODO: write a CLI https://developer.atlassian.com/blog/2015/11/scripting-with-node/
-
 //TODO: continue replacing for/in loops with _.each.
+//TODO: continue fleshing out jsDocs.
 
 /**
  * [JSONMarkdownTable description]
@@ -25,10 +25,10 @@ try{
 var JSONMarkdownTable = function JSONMarkdownTable(){};
 
 /**
- * [createJSONMarkdownTable description]
- * @param  {[type]}   fieldArray [description]
- * @param  {Function} callback   [description]
- * @return {[type]}              [description]
+ * Master function.
+ * @param  {Object}   fieldArray Object containing all of the cells for the table. Each column is rendered individually.
+ * @param  {Function} callback   Function to be invoked upon completion of table construction.
+ * @return {String}              The constructed table.
  */
 JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray, callback){
 	var self = this;
@@ -61,7 +61,7 @@ JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdow
 };
 
 /**
- * [createTableMap description]
+ * Finds the max width for each column and the max height for each row.
  * @param  {[type]} fieldArray [description]
  * @return {[type]}            [description]
  */
@@ -85,13 +85,13 @@ JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray)
 };
 
 /*
-determines whether an input is a JSON string, a regular string, or an object.
+
 returns an object with two properties: value and type.
 */
 /**
- * [_isJSONStringOrObject description]
- * @param  {[type]}  stringOrObject [description]
- * @return {Boolean}                [description]
+ * Determines whether an input is a JSON string, a regular string, or an object.
+ * @param  {Object/String} stringOrObject The object or string to test.
+ * @return {Object}                       An object containing the the input's type and value.
  */
 var _isJSONStringOrObject = function _isJSONStringOrObject(stringOrObject){
 	if(typeof stringOrObject === 'object'){
@@ -114,15 +114,15 @@ var _isJSONStringOrObject = function _isJSONStringOrObject(stringOrObject){
 	}
 };
 
-
-/*
-Validates the headers of a provided input (the zeroeth element.)
+/**
+ * Ensures that the headers (the zeroeth element of a given input) are all non-JSON strings.
+ * @param  {[type]} headerCells [description]
+ * @return {[type]}             [description]
  */
 JSONMarkdownTable.prototype.validateHeaders = function validateHeaders(headerCells){
 	var headersAreValid = true;
 	_.each(headerCells, function(cell){
 		//TODO: find a way to determine if a string is a valid variable name.
-		//Make this a configurable option.
 		if(_isJSONStringOrObject(cell.value).type === 'JSON' || typeof cell.value !== 'string' || cell.value === ""){
 			headersAreValid = false;
 			return false; //TODO: this is how you break out of a loop in lodash _.each.
@@ -133,7 +133,7 @@ JSONMarkdownTable.prototype.validateHeaders = function validateHeaders(headerCel
 };
 
 /**
- * [findColumnWidth description]
+ * Iterates through the cells in each column to determine the widest cell, which determines the width of the column.
  * @param  {[type]} fieldArray  [description]
  * @param  {[type]} columnIndex [description]
  * @return {[type]}             [description]
