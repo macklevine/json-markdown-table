@@ -19,8 +19,17 @@ try{
 
 //TODO: continue replacing for/in loops with _.each.
 
+/**
+ * [JSONMarkdownTable description]
+ */
 var JSONMarkdownTable = function JSONMarkdownTable(){};
 
+/**
+ * [createJSONMarkdownTable description]
+ * @param  {[type]}   fieldArray [description]
+ * @param  {Function} callback   [description]
+ * @return {[type]}              [description]
+ */
 JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdownTable(fieldArray, callback){
 	var self = this;
 	//construct the markdown table string only if the headers are valid.
@@ -51,6 +60,11 @@ JSONMarkdownTable.prototype.createJSONMarkdownTable = function createJSONMarkdow
 	}
 };
 
+/**
+ * [createTableMap description]
+ * @param  {[type]} fieldArray [description]
+ * @return {[type]}            [description]
+ */
 JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray){
 	var self = this;
 
@@ -74,6 +88,11 @@ JSONMarkdownTable.prototype.createTableMap = function createTableMap(fieldArray)
 determines whether an input is a JSON string, a regular string, or an object.
 returns an object with two properties: value and type.
 */
+/**
+ * [_isJSONStringOrObject description]
+ * @param  {[type]}  stringOrObject [description]
+ * @return {Boolean}                [description]
+ */
 var _isJSONStringOrObject = function _isJSONStringOrObject(stringOrObject){
 	if(typeof stringOrObject === 'object'){
 		return {
@@ -113,6 +132,12 @@ JSONMarkdownTable.prototype.validateHeaders = function validateHeaders(headerCel
 	return headersAreValid;
 };
 
+/**
+ * [findColumnWidth description]
+ * @param  {[type]} fieldArray  [description]
+ * @param  {[type]} columnIndex [description]
+ * @return {[type]}             [description]
+ */
 JSONMarkdownTable.prototype.findColumnWidth = function findColumnWidth(fieldArray, columnIndex){
 	var maxWidth = 0;
 	var columnValues = [];
@@ -140,6 +165,12 @@ JSONMarkdownTable.prototype.findColumnWidth = function findColumnWidth(fieldArra
 	};
 };
 
+/**
+ * [findRowHeight description]
+ * @param  {[type]} fieldArray [description]
+ * @param  {[type]} rowIndex   [description]
+ * @return {[type]}            [description]
+ */
 JSONMarkdownTable.prototype.findRowHeight = function findRowHeight(fieldArray, rowIndex){
 	var maxHeight = 1; //the line height of a string.
 	var parsed, JSONstring;
@@ -157,6 +188,11 @@ JSONMarkdownTable.prototype.findRowHeight = function findRowHeight(fieldArray, r
 /*
 adds horizontal lines that look like this: |--------|
 */
+/**
+ * [_addHorizontalLine description]
+ * @param {[type]} cell     [description]
+ * @param {[type]} maxWidth [description]
+ */
 var _addHorizontalLine = function _addHorizontalLine(cell, maxWidth){
 	cell += '|';
 	for (var j = 0; j < maxWidth; j++){
@@ -166,6 +202,12 @@ var _addHorizontalLine = function _addHorizontalLine(cell, maxWidth){
 	return cell;
 };
 
+/**
+ * [_addCellValueAndWhiteSpace description]
+ * @param {[type]} cell            [description]
+ * @param {[type]} whiteSpaceToAdd [description]
+ * @param {[type]} cellValue       [description]
+ */
 var _addCellValueAndWhiteSpace = function _addCellValueAndWhiteSpace(cell, whiteSpaceToAdd, cellValue){
 	cell += ('|' + cellValue);
 	while (whiteSpaceToAdd){
@@ -179,6 +221,12 @@ var _addCellValueAndWhiteSpace = function _addCellValueAndWhiteSpace(cell, white
 /*
 renders each column individually for simplicity.
 */
+/**
+ * [renderColumn description]
+ * @param  {[type]} columnObject [description]
+ * @param  {[type]} rowHeights   [description]
+ * @return {[type]}              [description]
+ */
 JSONMarkdownTable.prototype.renderColumn = function renderColumn(columnObject, rowHeights){
 	//TODO: add white space based on row height.
 	var cells = [];
